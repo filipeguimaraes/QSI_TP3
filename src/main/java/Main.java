@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Main {
     public static void main(String[] args) throws Exception {
@@ -13,7 +14,10 @@ public class Main {
         List<Pacote> captura = read(fileName);
         Atraso atraso = new Atraso(captura);
         Enderecos enderecos = new Enderecos(captura);
-        System.out.println(enderecos.getSource());
+        Protocolos protocolos = new Protocolos(captura);
+        for (String p: protocolos.getProtocolos().keySet()) {
+            System.out.println(p+": "+protocolos.getProtocolos().get(p));
+        }
 
     }
 
