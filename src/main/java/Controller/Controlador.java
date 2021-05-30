@@ -101,11 +101,15 @@ public class Controlador implements Initializable {
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.setName("Atraso");
 
-        for (int i = 0; i < atrasoData.getAtrasos().size() || i < atrasoData.getTempo().size(); i++) {
+        for (int i = 0; i < atrasoData.getAtrasos().size()-5 || i < atrasoData.getTempo().size()-5; i++) {
             //if (atrasoData.getTempo().get(i) > 10) {
-                series.getData().add(new XYChart.Data<>(atrasoData.getTempo().get(i).toString(), atrasoData.getAtrasos().get(i)));
+                float media = 0;
+                for (int j = i; j< i+10;j++){
+                    media += atrasoData.getAtrasos().get(j);
+                }
+                series.getData().add(new XYChart.Data<>(atrasoData.getTempo().get(i).toString(), media));
 
-            i+=5;
+            i+=10;
         }
 
         atraso.getData().add(series);
