@@ -44,7 +44,7 @@ public class Enderecos {
     }
 
     public List<Endereco> getEnderecosOrigem() {
-        System.out.println(enderecosOrigem);
+        //System.out.println(enderecosOrigem);
         return enderecosOrigem;
     }
 

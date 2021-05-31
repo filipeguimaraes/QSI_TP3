@@ -153,7 +153,7 @@ public class Controlador implements Initializable {
             }
             if (i == 8) break;
         }
-        System.out.println("Dest: "+i);
+        //System.out.println("Dest: "+i);
         enderecosOrigem.getData().add(series1);
     }
 
