@@ -3,6 +3,7 @@ Model/Enderecos.class
 Controller/Controlador.class
 Model/Data.class
 Model/Pacote.class
+Model/Endereco.class
 MainFX.class
 Main.class
 MainFX$1.class

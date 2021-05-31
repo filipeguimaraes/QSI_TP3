@@ -1,14 +1,17 @@
 package Model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Enderecos {
-    private final Map<String, Integer> source = new HashMap<>();
+    private List<Endereco> enderecosOrigem = new ArrayList<>();
     private final Map<String, Integer> destination = new HashMap<>();
 
     public Enderecos(List<Pacote> captura) {
+        final Map<String, Integer> source = new HashMap<>();
         for (Pacote pacote : captura) {
             int somaS = 0;
             int somaD = 0;
@@ -29,10 +32,20 @@ public class Enderecos {
                 destination.put(destAd,1);
             }
         }
+
+        for (String en : source.keySet()) {
+            enderecosOrigem.add(new Endereco(en,source.get(en)));
+        }
+
+        enderecosOrigem = enderecosOrigem.stream()
+                .sorted((Endereco e1, Endereco e2) -> e2.getOcorrencias() - e1.getOcorrencias())
+                .collect(Collectors.toList());
+
     }
 
-    public Map<String, Integer> getSource() {
-        return source;
+    public List<Endereco> getEnderecosOrigem() {
+        System.out.println(enderecosOrigem);
+        return enderecosOrigem;
     }
 
     public Map<String, Integer> getDestination() {

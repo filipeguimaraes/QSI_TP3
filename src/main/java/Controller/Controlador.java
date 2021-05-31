@@ -2,6 +2,7 @@ package Controller;
 
 import Model.Atraso;
 import Model.Data;
+import Model.Endereco;
 import Model.Protocolos;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -52,7 +53,7 @@ public class Controlador implements Initializable {
     private NumberAxis protocolosY;
 
     @FXML
-    private BarChart<String, Number> enderecosOrigem;
+    private BarChart<Number, String> enderecosOrigem;
 
     @FXML
     private CategoryAxis origemX;
@@ -92,8 +93,8 @@ public class Controlador implements Initializable {
 
         setAtraso(Data.getInstance().getAtraso());
         setProtocolos(Data.getInstance().getProtocolos());
-        setEnderecosOrigem(Data.getInstance().getEnderecos().getSource());
-        setEnderecosDestino(Data.getInstance().getEnderecos().getDestination());
+        setEnderecosOrigem(Data.getInstance().getEnderecos().getEnderecosOrigem());
+        setEnderecosDestino(Data.getInstance().getEnderecos().getEnderecosOrigem(), Data.getInstance().getEnderecos().getDestination());
 
     }
 
@@ -101,15 +102,15 @@ public class Controlador implements Initializable {
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.setName("Atraso");
 
-        for (int i = 0; i < atrasoData.getAtrasos().size()-5 || i < atrasoData.getTempo().size()-5; i++) {
+        for (int i = 0; i < atrasoData.getAtrasos().size()-29 || i < atrasoData.getTempo().size()-29; i++) {
             //if (atrasoData.getTempo().get(i) > 10) {
                 float media = 0;
-                for (int j = i; j< i+10;j++){
+                for (int j = i; j< i+29;j++){
                     media += atrasoData.getAtrasos().get(j);
                 }
                 series.getData().add(new XYChart.Data<>(atrasoData.getTempo().get(i).toString(), media));
 
-            i+=10;
+            i+=30;
         }
 
         atraso.getData().add(series);
@@ -129,21 +130,30 @@ public class Controlador implements Initializable {
         }
     }
 
-    private void setEnderecosOrigem(Map<String, Integer> origem) {
-        XYChart.Series<String, Number> series1 = new XYChart.Series<>();
+    private void setEnderecosOrigem(List<Endereco> origem) {
+        XYChart.Series<Number, String> series1 = new XYChart.Series<>();
         series1.setName("Origem");
-        for (String addr : origem.keySet()) {
-            series1.getData().add(new XYChart.Data<>(addr, Math.log(origem.get(addr))));
+        int i = 0;
+        for (Endereco addr : origem) {
+            series1.getData().add(new XYChart.Data<>(Math.log(addr.getOcorrencias()),addr.getEndereco()));
+            i++;
+            if(i == 8) break;
         }
         enderecosOrigem.getData().add(series1);
     }
 
-    private void setEnderecosDestino(Map<String, Integer> destino) {
-        XYChart.Series<String, Number> series1 = new XYChart.Series<>();
+    private void setEnderecosDestino(List<Endereco> origem, Map<String,Integer> destino) {
+        XYChart.Series<Number, String> series1 = new XYChart.Series<>();
         series1.setName("Destino");
-        for (String addr : destino.keySet()) {
-            series1.getData().add(new XYChart.Data<>(addr, Math.log(destino.get(addr))));
+        int i = 0;
+        for (Endereco addr : origem) {
+            i++;
+            if (destino.containsKey(addr.getEndereco())){
+                series1.getData().add(new XYChart.Data<>(Math.log(destino.get(addr.getEndereco())),addr.getEndereco()));
+            }
+            if (i == 8) break;
         }
+        System.out.println("Dest: "+i);
         enderecosOrigem.getData().add(series1);
     }
 
